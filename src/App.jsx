@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import TodoApp from "./assets/TodoApp.png"
 import PolyFarmacy from "./assets/PolyFarmacy.png"
 import Zomo from "./assets/Zomo.png"
+import pfp from "./assets/pfp.png"
+import "remixicon/fonts/remixicon.css";
 function App() {
 	const [activeSection, setActiveSection] = useState("home");
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -197,7 +199,7 @@ function App() {
 					<div className="flex-shrink-0">
 						<div className="w-80 h-80 bg-gradient-to-br from-gray-200 to-gray-400 rounded-2xl overflow-hidden shadow-2xl">
 							<div className="w-full h-full bg-gray-300 flex items-center justify-center">
-								<i className="ri-user-line text-8xl text-gray-600"></i>
+							<img src={pfp} alt="" />
 							</div>
 						</div>
 					</div>
