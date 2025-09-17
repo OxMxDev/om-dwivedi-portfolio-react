@@ -2,11 +2,46 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>Om Dwivedi — Full-Stack Developer | React, Node.js, TypeScript</title>
+    <meta name="description" content="Portfolio of Om Dwivedi, Full-Stack Developer specializing in React, Node.js, and TypeScript. Explore featured projects, skills, and experience." />
+    <meta name="keywords" content="Om Dwivedi, Full-Stack Developer, React, Node.js, TypeScript, Portfolio" />
+    <meta name="author" content="Om Dwivedi" />
+    <meta name="robots" content="index, follow" />
+
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="canonical" href="/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Om Dwivedi — Full-Stack Developer" />
+    <meta property="og:description" content="Building scalable web apps with React, Node.js, and modern tooling." />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/vite.svg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Om Dwivedi — Full-Stack Developer" />
+    <meta name="twitter:description" content="Building scalable web apps with React, Node.js, and modern tooling." />
+    <meta name="twitter:image" content="/vite.svg" />
+
+    <!-- Theme colors -->
+    <meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <script>
+      (function() {
+        try {
+          var stored = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = stored || (prefersDark ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
+    <a href="#home" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-black/80 focus:text-white focus:px-4 focus:py-2 focus:rounded-md">Skip to content</a>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

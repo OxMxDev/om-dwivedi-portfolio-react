@@ -34,7 +34,10 @@ import {
   Palette,
   Shield,
   Clock,
-  MessageSquare
+  MessageSquare,
+  Sun,
+  Moon,
+  User
 } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui/card";
@@ -56,6 +59,14 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [theme, setTheme] = useState(() => {
+    if (typeof document === "undefined") return "light";
+    return document.documentElement.getAttribute("data-theme") || "light";
+  });
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -68,6 +79,38 @@ function App() {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("mousemove", handleMouseMove);
     };
+  }, []);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.documentElement.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem("theme", theme);
+    } catch (e) {}
+  }, [theme]);
+
+  useEffect(() => {
+    const ids = ["home", "about", "experience", "projects", "skills", "contact"];
+    const elements = ids
+      .map((id) => document.getElementById(id))
+      .filter((el) => Boolean(el));
+
+    if (elements.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible && visible.target && visible.target.id) {
+          setActiveSection(visible.target.id);
+        }
+      },
+      { root: null, rootMargin: "0px 0px -40% 0px", threshold: [0.25, 0.5, 0.75] }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   const scrollToSection = (sectionId) => {
@@ -251,6 +294,7 @@ function App() {
                     key={item}
                     variant="ghost"
                     onClick={() => scrollToSection(item)}
+                    aria-current={activeSection === item ? "page" : undefined}
                     className={`capitalize transition-all duration-200 hover:bg-primary/10 ${
                       activeSection === item ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"
                     }`}
@@ -261,6 +305,19 @@ function App() {
               </div>
 
               <div className="hidden md:flex items-center gap-3">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Toggle theme"
+                  onClick={toggleTheme}
+                  className="border border-transparent hover:border-border"
+                >
+                  {theme === "dark" ? (
+                    <Sun className="w-4 h-4" />
+                  ) : (
+                    <Moon className="w-4 h-4" />
+                  )}
+                </Button>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button variant="outline" size="sm" className="border-primary/20 hover:bg-primary/10">
@@ -272,7 +329,7 @@ function App() {
                     <p>Download my resume</p>
                   </TooltipContent>
                 </Tooltip>
-                <Button onClick={() => scrollToSection("contact")} className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 shadow-lg">
+                <Button onClick={() => scrollToSection("contact")} aria-label="Hire me contact section" className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 shadow-lg">
                   <Mail className="w-4 h-4 mr-2" />
                   Hire Me
                 </Button>
@@ -284,6 +341,9 @@ function App() {
                 size="icon"
                 className="md:hidden"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-expanded={isMenuOpen}
+                aria-controls="mobile-menu"
+                aria-label="Toggle navigation menu"
               >
                 {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </Button>
@@ -297,14 +357,27 @@ function App() {
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   className="md:hidden bg-card/95 backdrop-blur-xl border-t border-border rounded-b-lg"
+                  id="mobile-menu"
                 >
                   <div className="py-4 space-y-2 px-4">
+                    <div className="flex items-center justify-between">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-full"
+                        aria-label="Toggle theme"
+                        onClick={toggleTheme}
+                      >
+                        {theme === "dark" ? "Switch to Light" : "Switch to Dark"}
+                      </Button>
+                    </div>
                     {["home", "about", "experience", "projects", "skills", "contact"].map((item) => (
                       <Button
                         key={item}
                         variant="ghost"
                         onClick={() => scrollToSection(item)}
                         className="w-full justify-start capitalize"
+                        aria-current={activeSection === item ? "page" : undefined}
                       >
                         {item}
                       </Button>
@@ -459,6 +532,8 @@ function App() {
                   <img 
                     src={pfp} 
                     alt="Om Dwivedi" 
+                    loading="eager"
+                    decoding="async"
                     className="w-full h-full object-cover"
                   />
                 </motion.div>
@@ -1094,6 +1169,8 @@ const ProjectCard = ({ project, index, featured = false }) => (
         <img
           src={project.image}
           alt={project.title}
+          loading="lazy"
+          decoding="async"
           className={`w-full object-cover transition-transform duration-500 group-hover:scale-110 ${featured ? 'h-64' : 'h-48'}`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
