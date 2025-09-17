@@ -84,3 +84,14 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Subtle noise overlay */
+.noise-overlay {
+  position: fixed;
+  pointer-events: none;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 1px);
+  background-size: 3px 3px;
+  opacity: 0.25;
+}

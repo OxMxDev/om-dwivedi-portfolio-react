@@ -48,6 +48,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "./components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./components/ui/tooltip";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./components/ui/hover-card";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/ui/accordion";
 import TodoApp from "./assets/TodoApp.png";
 import PolyFarmacy from "./assets/PolyFarmacy.png";
@@ -259,6 +260,7 @@ function App() {
             transition={{ type: "spring", stiffness: 50, damping: 20 }}
           />
         </div>
+        <div className="noise-overlay" />
 
         {/* Enhanced Navigation */}
         <motion.nav 
@@ -320,9 +322,11 @@ function App() {
                 </Button>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="sm" className="border-primary/20 hover:bg-primary/10">
-                      <Download className="w-4 h-4 mr-2" />
-                      Resume
+                    <Button asChild variant="outline" size="sm" className="border-primary/20 hover:bg-primary/10">
+                      <a href="/resume.pdf" download>
+                        <Download className="w-4 h-4 mr-2" />
+                        Resume
+                      </a>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -383,9 +387,11 @@ function App() {
                       </Button>
                     ))}
                     <Separator className="my-2" />
-                    <Button variant="outline" className="w-full">
-                      <Download className="w-4 h-4 mr-2" />
-                      Download Resume
+                    <Button asChild variant="outline" className="w-full">
+                      <a href="/resume.pdf" download>
+                        <Download className="w-4 h-4 mr-2" />
+                        Download Resume
+                      </a>
                     </Button>
                   </div>
                 </motion.div>
@@ -1069,9 +1075,11 @@ function App() {
                       Start a Conversation
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
                     </Button>
-                    <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary/10">
-                      <Download className="w-5 h-5 mr-2" />
-                      Download Resume
+                    <Button asChild size="lg" variant="outline" className="border-primary/20 hover:bg-primary/10">
+                      <a href="/resume.pdf" download>
+                        <Download className="w-5 h-5 mr-2" />
+                        Download Resume
+                      </a>
                     </Button>
                   </div>
 
@@ -1240,6 +1248,74 @@ const ProjectCard = ({ project, index, featured = false }) => (
                 </a>
               </Button>
             )}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="sm" variant="secondary" className="flex-1">
+                  Case Study
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{project.title}</DialogTitle>
+                  <DialogDescription>{project.description}</DialogDescription>
+                </DialogHeader>
+                <div className="p-6 pt-0 space-y-6">
+                  <div>
+                    <h4 className="text-sm font-medium mb-2 text-primary">Tech Stack</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {project.tech.map((tech) => (
+                        <Badge key={tech} variant="secondary" className="text-xs px-2 py-1">{tech}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                  {project.highlights && (
+                    <div>
+                      <h4 className="text-sm font-medium mb-2 text-primary">Highlights</h4>
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {project.highlights.map((h) => (
+                          <li key={h} className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                            {h}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {project.stats && (
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="text-center">
+                        <div className="text-xl font-bold">{project.stats.stars}</div>
+                        <div className="text-xs text-muted-foreground">Stars</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xl font-bold">{project.stats.forks}</div>
+                        <div className="text-xs text-muted-foreground">Forks</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xl font-bold">{project.stats.commits}</div>
+                        <div className="text-xs text-muted-foreground">Commits</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" asChild>
+                    <a href={project.github} target="_blank" rel="noopener noreferrer">
+                      <Github className="w-4 h-4 mr-2" />
+                      View Code
+                    </a>
+                  </Button>
+                  {project.live && (
+                    <Button asChild className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90">
+                      <a href={project.live} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Live Site
+                      </a>
+                    </Button>
+                  )}
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </CardContent>
