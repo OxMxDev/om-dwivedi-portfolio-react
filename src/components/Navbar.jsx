@@ -92,7 +92,7 @@ export default function Navbar({ activeSection, onNavigate }) {
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-              className="md:hidden border-t border-[var(--border-glass)] py-4 space-y-1"
+              className="md:hidden border-t border-[var(--border-glass)] py-4 space-y-1 bg-[#0a0a0a]/95 backdrop-blur-xl"
               initial={shouldReduceMotion ? {} : { opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
