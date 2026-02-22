@@ -123,7 +123,7 @@ function DataViz({ shouldReduceMotion }) {
       {bars.map((h, i) => (
         <motion.div
           key={i}
-          className="flex-1 rounded-sm bg-gradient-to-t from-violet-500 to-teal-400"
+          className="flex-1 rounded-sm bg-[var(--accent)]"
           initial={shouldReduceMotion ? { height: `${h}%` } : { height: 0 }}
           animate={{ height: `${h}%` }}
           transition={{

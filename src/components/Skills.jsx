@@ -88,12 +88,7 @@ export default function Skills() {
       className="py-24 px-4 relative"
       aria-label="Skills and technologies"
     >
-      {/* Background accent */}
-      <div
-        className="absolute inset-0 opacity-25"
-        style={{ background: "var(--gradient-card)" }}
-        aria-hidden="true"
-      />
+
 
       <div className="relative max-w-6xl mx-auto">
         {/* Section header */}
@@ -104,7 +99,7 @@ export default function Skills() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent-amber)] mb-3 block">
+          <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)] mb-3 block">
             My Toolkit
           </span>
           <h2 className="text-4xl lg:text-5xl font-bold mb-4">
@@ -146,7 +141,7 @@ export default function Skills() {
               <div
                 className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                 style={{
-                  background: `radial-gradient(circle at 50% 50%, ${skill.color}15, transparent 70%)`,
+                  background: `radial-gradient(circle at 50% 50%, ${skill.color}10, transparent 70%)`,
                 }}
                 aria-hidden="true"
               />

@@ -18,9 +18,9 @@ export default function SquishyButton({
 
   const variantClasses = {
     filled:
-      "bg-gradient-to-r from-[var(--accent-violet)] to-[var(--accent-teal)] text-white hover:shadow-[0_0_30px_rgba(124,58,237,0.4)]",
+      "bg-[var(--accent)] text-[#0a0a0a] font-bold hover:shadow-[0_0_24px_rgba(45,212,191,0.25)]",
     outlined:
-      "border-2 border-[var(--border-glass)] text-[var(--text-primary)] hover:border-[var(--accent-violet-light)] hover:text-white bg-transparent",
+      "border border-white/[0.08] text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-white bg-transparent",
     ghost:
       "text-[var(--text-secondary)] hover:text-white hover:bg-white/5 bg-transparent",
   };

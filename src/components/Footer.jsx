@@ -4,10 +4,9 @@ export default function Footer() {
       className="relative py-10 px-4 text-center"
       role="contentinfo"
     >
-      {/* Gradient divider */}
+      {/* Subtle divider */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-xl h-px"
-        style={{ background: "var(--gradient-hero)" }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-xl h-px bg-white/[0.05]"
         aria-hidden="true"
       />
 
