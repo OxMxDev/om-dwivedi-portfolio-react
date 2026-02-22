@@ -9,21 +9,21 @@ const CONTACTS = [
     title: "Email",
     value: "omdwivedi234@example.com",
     href: "mailto:omdwivedi234@example.com",
-    color: "var(--accent-violet)",
+    color: "var(--accent)",
   },
   {
     icon: "ri-phone-line",
     title: "Phone",
     value: "+91 8707564894",
     href: "tel:+918707564894",
-    color: "var(--accent-teal)",
+    color: "var(--accent)",
   },
   {
     icon: "ri-map-pin-line",
     title: "Location",
     value: "Chennai, Tamil Nadu",
     href: "#contact",
-    color: "var(--accent-amber)",
+    color: "var(--accent)",
   },
 ];
 
@@ -113,16 +113,16 @@ export default function Contact() {
   const inputClasses = (field) =>
     `w-full bg-white/[0.03] border ${
       errors[field]
-        ? "border-[var(--accent-rose)]"
-        : "border-[var(--border-glass)] focus:border-[var(--accent-violet-light)]"
+        ? "border-red-500/60"
+        : "border-[var(--border-glass)] focus:border-[var(--accent)]"
     } rounded-xl px-4 py-3.5 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none transition-colors duration-200 text-sm`;
 
   return (
-    <section id="contact" className="py-24 px-4 relative" aria-label="Contact information">
+    <section id="contact" className="py-24 px-4 relative overflow-hidden" aria-label="Contact information">
       {/* Background glow */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full blur-[150px] opacity-10"
-        style={{ background: "var(--accent-violet)" }}
+        style={{ background: "var(--accent)" }}
         aria-hidden="true"
       />
 
@@ -135,7 +135,7 @@ export default function Contact() {
       >
         {/* Section header */}
         <motion.div className="text-center mb-14" variants={shouldReduceMotion ? {} : itemVariants}>
-          <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent-rose)] mb-3 block">
+          <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)] mb-3 block">
             Get in Touch
           </span>
           <h2 className="text-4xl lg:text-5xl font-bold mb-4">
@@ -161,7 +161,7 @@ export default function Contact() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label htmlFor="contact-name" className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-                    Name <span className="text-[var(--accent-rose)]" aria-hidden="true">*</span>
+                    Name <span className="text-red-400" aria-hidden="true">*</span>
                   </label>
                   <input
                     id="contact-name"
@@ -177,7 +177,7 @@ export default function Contact() {
                     aria-describedby={errors.name ? "name-error" : undefined}
                   />
                   {errors.name && (
-                    <p id="name-error" className="text-xs text-[var(--accent-rose)] mt-1.5" role="alert">
+                    <p id="name-error" className="text-xs text-red-400 mt-1.5" role="alert">
                       {errors.name}
                     </p>
                   )}
@@ -185,7 +185,7 @@ export default function Contact() {
 
                 <div>
                   <label htmlFor="contact-email" className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-                    Email <span className="text-[var(--accent-rose)]" aria-hidden="true">*</span>
+                    Email <span className="text-red-400" aria-hidden="true">*</span>
                   </label>
                   <input
                     id="contact-email"
@@ -201,7 +201,7 @@ export default function Contact() {
                     aria-describedby={errors.email ? "email-error" : undefined}
                   />
                   {errors.email && (
-                    <p id="email-error" className="text-xs text-[var(--accent-rose)] mt-1.5" role="alert">
+                    <p id="email-error" className="text-xs text-red-400 mt-1.5" role="alert">
                       {errors.email}
                     </p>
                   )}
@@ -228,7 +228,7 @@ export default function Contact() {
               {/* Message */}
               <div>
                 <label htmlFor="contact-message" className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-                  Message <span className="text-[var(--accent-rose)]" aria-hidden="true">*</span>
+                  Message <span className="text-red-400" aria-hidden="true">*</span>
                 </label>
                 <textarea
                   id="contact-message"
@@ -243,7 +243,7 @@ export default function Contact() {
                   aria-describedby={errors.message ? "message-error" : undefined}
                 />
                 {errors.message && (
-                  <p id="message-error" className="text-xs text-[var(--accent-rose)] mt-1.5" role="alert">
+                  <p id="message-error" className="text-xs text-red-400 mt-1.5" role="alert">
                     {errors.message}
                   </p>
                 )}
@@ -356,7 +356,7 @@ export default function Contact() {
                     href={social.href}
                     target={social.href.startsWith("http") ? "_blank" : undefined}
                     rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="w-11 h-11 rounded-xl glass flex items-center justify-center text-[var(--text-secondary)] hover:text-white hover:border-[var(--accent-violet-light)] transition-colors duration-200"
+                    className="w-11 h-11 rounded-xl glass flex items-center justify-center text-[var(--text-secondary)] hover:text-white hover:border-[var(--accent)] transition-colors duration-200"
                     whileHover={shouldReduceMotion ? {} : { scale: 1.1, y: -3 }}
                     whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
                     aria-label={social.label}

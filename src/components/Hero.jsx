@@ -280,7 +280,7 @@ export default function Hero({ onNavigate }) {
           </motion.div>
 
           {/* Main headline — massive brutalist type */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[0.95] tracking-[-0.03em] mb-2">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[0.95] tracking-[-0.03em] mb-2">
             {LINE1.map((w, i) => (
               <KineticWord key={w} word={w} index={i} shouldReduceMotion={shouldReduceMotion} />
             ))}
@@ -306,7 +306,7 @@ export default function Hero({ onNavigate }) {
           </h1>
 
           {/* Accent line — gradient */}
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1] tracking-[-0.02em] mb-8">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1] tracking-[-0.02em] mb-8">
             {ACCENT_LINE.map((w, i) => (
               <KineticWord
                 key={w}
