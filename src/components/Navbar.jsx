@@ -10,8 +10,9 @@ export default function Navbar({ activeSection, onNavigate }) {
   const shouldReduceMotion = useReducedMotion();
 
   const handleNav = (sectionId) => {
-    onNavigate(sectionId);
     setIsMenuOpen(false);
+    // Delay scroll so the menu's exit animation doesn't interrupt scrollIntoView
+    setTimeout(() => onNavigate(sectionId), 300);
   };
 
   return (
