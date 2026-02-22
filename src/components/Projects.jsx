@@ -5,7 +5,7 @@ import "remixicon/fonts/remixicon.css";
 import ShopSphereImg from "../assets/ShopSphere.png";
 import JobPortalImg from "../assets/JobPortal.png";
 // Uncomment when the Chat App screenshot is added:
-// import ChatAppImg from "../assets/ChatApp.png";
+import ChatAppImg from "../assets/ChatApp.png";
 
 /* ─── Project Data ─── */
 const PROJECTS = [
@@ -39,7 +39,7 @@ const PROJECTS = [
     github: "https://github.com/OxMxDev/Real-Time-Chat-Application",
     live: "https://real-time-chat-application-frontend-tawny.vercel.app",
     layout: "half",
-    image: null, // Will be replaced with ChatAppImg once provided
+    image: ChatAppImg, // Will be replaced with ChatAppImg once provided
     fallbackType: "chat",
   },
   {
