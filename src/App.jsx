@@ -23,7 +23,8 @@ function App() {
   const scrollToSection = useCallback((sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      const top = element.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top, behavior: "smooth" });
       setActiveSection(sectionId);
     }
   }, []);
@@ -74,16 +75,16 @@ function App() {
         {/* Ambient radial glows — soft atmospheric lighting */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
           <div
-            className="absolute top-[30%] -left-[15%] w-[600px] h-[600px] rounded-full opacity-[0.08]"
+            className="absolute top-[30%] -left-[15%] w-[600px] h-[600px] rounded-full opacity-[0.04]"
             style={{
-              background: "radial-gradient(circle, rgba(45,212,191,0.4), transparent 70%)",
+              background: "radial-gradient(circle, rgba(94,234,212,0.4), transparent 70%)",
               filter: "blur(80px)",
             }}
           />
           <div
-            className="absolute top-[65%] -right-[10%] w-[500px] h-[500px] rounded-full opacity-[0.06]"
+            className="absolute top-[65%] -right-[10%] w-[500px] h-[500px] rounded-full opacity-[0.03]"
             style={{
-              background: "radial-gradient(circle, rgba(45,212,191,0.3), transparent 70%)",
+              background: "radial-gradient(circle, rgba(94,234,212,0.3), transparent 70%)",
               filter: "blur(100px)",
             }}
           />

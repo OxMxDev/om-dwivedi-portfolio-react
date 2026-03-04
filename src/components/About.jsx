@@ -1,5 +1,10 @@
+import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import "remixicon/fonts/remixicon.css";
+
+/* ─── Config ─── */
+const GITHUB_USERNAME = "OxMxDev";
+
 
 /* ─── About Cards Data ─── */
 const CARDS = [
@@ -87,10 +92,10 @@ function AboutCard({ card, index, shouldReduceMotion }) {
     <motion.div
       className={`group relative rounded-2xl overflow-hidden ${card.span}`}
       style={{
-        background: "rgba(15, 15, 30, 0.5)",
+        background: "var(--bg-card)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        border: "1px solid rgba(255, 255, 255, 0.04)",
+        border: "1px solid var(--border-glass)",
       }}
       initial={shouldReduceMotion ? {} : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -99,7 +104,7 @@ function AboutCard({ card, index, shouldReduceMotion }) {
       whileHover={
         shouldReduceMotion
           ? {}
-          : { y: -4, transition: { type: "spring", stiffness: 300, damping: 22 } }
+          : { y: -2, transition: { type: "spring", stiffness: 300, damping: 22 } }
       }
     >
       {/* Hover glow */}
@@ -113,7 +118,7 @@ function AboutCard({ card, index, shouldReduceMotion }) {
       <div
         className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
         style={{
-          boxShadow: `0 8px 40px -12px rgba(${card.color}, 0.15)`,
+          boxShadow: `inset 0 0 0 1px rgba(${card.color}, 0.2)`,
         }}
         aria-hidden="true"
       />
@@ -173,6 +178,86 @@ function AboutCard({ card, index, shouldReduceMotion }) {
   );
 }
 
+/* ─── Contribution Chart Card ─── */
+function ContributionCard({ title, icon, color, href, children, index, shouldReduceMotion }) {
+  const [imgLoaded, setImgLoaded] = useState(false);
+
+  return (
+    <motion.div
+      className="group relative rounded-2xl overflow-hidden"
+      style={{
+        background: "var(--bg-card)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        border: "1px solid var(--border-glass)",
+      }}
+      initial={shouldReduceMotion ? {} : { opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5, delay: index * 0.12, ease: "easeOut" }}
+      whileHover={
+        shouldReduceMotion
+          ? {}
+          : { y: -2, transition: { type: "spring", stiffness: 300, damping: 22 } }
+      }
+    >
+      {/* Hover glow */}
+      <div
+        className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{
+          background: `linear-gradient(135deg, rgba(${color}, 0.06), transparent 60%)`,
+        }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{ boxShadow: `inset 0 0 0 1px rgba(${color}, 0.2)` }}
+        aria-hidden="true"
+      />
+
+      <div className="relative p-5 sm:p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-2">
+            <i
+              className={`${icon} text-lg`}
+              style={{ color: `rgb(${color})` }}
+              aria-hidden="true"
+            />
+            <span
+              className="text-xs font-semibold uppercase tracking-[0.15em]"
+              style={{ color: `rgb(${color})` }}
+            >
+              {title}
+            </span>
+          </div>
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-[var(--text-muted)] hover:text-white hover:border-white/20 transition-all duration-200"
+          >
+            <i className="ri-external-link-line text-xs" aria-hidden="true" />
+            Profile
+          </a>
+        </div>
+
+        {/* Chart area */}
+        <div className="contribution-chart-wrapper">
+          {!imgLoaded && (
+            <div className="contribution-chart-skeleton">
+              <div className="contribution-skeleton-shimmer" />
+            </div>
+          )}
+          <div className={`contribution-chart-img ${imgLoaded ? "is-loaded" : ""}`}>
+            {children(setImgLoaded)}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 /* ─── About Section ─── */
 export default function About() {
   const shouldReduceMotion = useReducedMotion();
@@ -216,6 +301,34 @@ export default function About() {
             />
           ))}
         </div>
+
+        {/* ─── Contribution Charts ─── */}
+        <motion.div
+          className="mt-6"
+          initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <ContributionCard
+              title="GitHub Activity"
+              icon="ri-github-fill"
+              color="142, 68, 255"
+              href={`https://github.com/${GITHUB_USERNAME}`}
+              index={0}
+              shouldReduceMotion={shouldReduceMotion}
+            >
+              {(onLoad) => (
+                <img
+                  src={`https://ghchart.rshah.org/7c3aed/${GITHUB_USERNAME}`}
+                  alt={`${GITHUB_USERNAME}'s GitHub contribution chart`}
+                  className="w-full h-auto"
+                  onLoad={() => onLoad(true)}
+                  loading="lazy"
+                />
+              )}
+            </ContributionCard>
+        </motion.div>
       </div>
     </section>
   );

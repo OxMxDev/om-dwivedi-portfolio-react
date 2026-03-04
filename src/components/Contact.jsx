@@ -7,8 +7,8 @@ const CONTACTS = [
   {
     icon: "ri-mail-line",
     title: "Email",
-    value: "omdwivedi234@example.com",
-    href: "mailto:omdwivedi234@example.com",
+    value: "omdwivedi234@gmail.com",
+    href: "mailto:omdwivedi234@gmail.com?subject=Hello%20from%20your%20portfolio",
     color: "var(--accent)",
   },
   {
@@ -30,7 +30,7 @@ const CONTACTS = [
 const SOCIALS = [
   { href: "https://github.com/OxMxDev", icon: "ri-github-fill", label: "GitHub" },
   { href: "https://www.linkedin.com/in/om-dwivedi129/", icon: "ri-linkedin-fill", label: "LinkedIn" },
-  { href: "mailto:omdwivedi234@example.com", icon: "ri-mail-fill", label: "Email" },
+  { href: "mailto:omdwivedi234@gmail.com?subject=Hello%20from%20your%20portfolio", icon: "ri-mail-fill", label: "Email" },
 ];
 
 const containerVariants = {
@@ -121,7 +121,7 @@ export default function Contact() {
     <section id="contact" className="py-24 px-4 relative overflow-hidden" aria-label="Contact information">
       {/* Background glow */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full blur-[150px] opacity-10"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full blur-[150px] opacity-[0.03]"
         style={{ background: "var(--accent)" }}
         aria-hidden="true"
       />
@@ -134,7 +134,7 @@ export default function Contact() {
         viewport={{ once: true, margin: "-50px" }}
       >
         {/* Section header */}
-        <motion.div className="text-center mb-14" variants={shouldReduceMotion ? {} : itemVariants}>
+        <motion.div className="mb-14" variants={shouldReduceMotion ? {} : itemVariants}>
           <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)] mb-3 block">
             Get in Touch
           </span>
@@ -142,7 +142,7 @@ export default function Contact() {
             Let's Work{" "}
             <span className="gradient-text">Together</span>
           </h2>
-          <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+          <p className="text-lg text-[var(--text-secondary)] max-w-2xl">
             Have a project in mind or just want to say hello? Fill out the form
             and I'll get back to you as soon as possible.
           </p>
@@ -325,7 +325,7 @@ export default function Contact() {
                 }
               >
                 <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
+                  className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:-translate-y-1"
                   style={{ background: `${contact.color}15` }}
                 >
                   <i
@@ -357,7 +357,7 @@ export default function Contact() {
                     target={social.href.startsWith("http") ? "_blank" : undefined}
                     rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
                     className="w-11 h-11 rounded-xl glass flex items-center justify-center text-[var(--text-secondary)] hover:text-white hover:border-[var(--accent)] transition-colors duration-200"
-                    whileHover={shouldReduceMotion ? {} : { scale: 1.1, y: -3 }}
+                    whileHover={shouldReduceMotion ? {} : { y: -3 }}
                     whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
                     aria-label={social.label}
                   >

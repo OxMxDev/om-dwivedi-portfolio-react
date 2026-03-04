@@ -1,11 +1,16 @@
+import { useRef, useState, useCallback } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import "remixicon/fonts/remixicon.css";
 
 /* ─── Image imports ─── */
 import ShopSphereImg from "../assets/ShopSphere.png";
 import JobPortalImg from "../assets/JobPortal.png";
-// Uncomment when the Chat App screenshot is added:
 import ChatAppImg from "../assets/ChatApp.png";
+
+/* ─── Video imports (uncomment & add files when ready) ─── */
+import ShopSphereVid from "../assets/ShopSphere.mp4";
+import ChatAppVid from "../assets/ChatApp.mp4";
+import JobPortalVid from "../assets/JobPortal.mp4";
 
 /* ─── Project Data ─── */
 const PROJECTS = [
@@ -24,6 +29,7 @@ const PROJECTS = [
     live: "https://shop-sphere-frontend-sepia.vercel.app",
     layout: "featured",
     image: ShopSphereImg,
+    video: ShopSphereVid,
   },
   {
     id: 2,
@@ -39,7 +45,8 @@ const PROJECTS = [
     github: "https://github.com/OxMxDev/Real-Time-Chat-Application",
     live: "https://real-time-chat-application-frontend-tawny.vercel.app",
     layout: "half",
-    image: ChatAppImg, // Will be replaced with ChatAppImg once provided
+    image: ChatAppImg,
+    video: ChatAppVid,
     fallbackType: "chat",
   },
   {
@@ -57,6 +64,7 @@ const PROJECTS = [
     live: "https://job-portal-frontend-z7u1.onrender.com",
     layout: "half",
     image: JobPortalImg,
+    video: JobPortalVid,
   },
 ];
 
@@ -87,6 +95,57 @@ function ChatMockup() {
   );
 }
 
+/* ─── Hover Video Overlay ─── */
+function HoverVideo({ video, brandColor }) {
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handleMouseEnter = useCallback(() => {
+    if (!videoRef.current) return;
+    videoRef.current.currentTime = 0;
+    videoRef.current.play().catch(() => {});
+    setIsPlaying(true);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (!videoRef.current) return;
+    videoRef.current.pause();
+    setIsPlaying(false);
+  }, []);
+
+  return (
+    <div
+      className="project-video-container"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Video layer */}
+      <video
+        ref={videoRef}
+        src={video}
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        className={`project-video-el ${isPlaying ? "is-playing" : ""}`}
+        aria-hidden="true"
+      />
+
+      {/* Play indicator */}
+      <div className={`project-video-indicator ${isPlaying ? "is-playing" : ""}`}>
+        <div
+          className="project-video-indicator-dot"
+          style={{ background: `rgb(${brandColor})` }}
+        />
+        <i
+          className={`${isPlaying ? "ri-pause-mini-fill" : "ri-play-mini-fill"} text-xs`}
+          aria-hidden="true"
+        />
+      </div>
+    </div>
+  );
+}
+
 /* ─── Project Card ─── */
 function ProjectCard({ project, shouldReduceMotion }) {
   const isFeatured = project.layout === "featured";
@@ -97,10 +156,10 @@ function ProjectCard({ project, shouldReduceMotion }) {
         isFeatured ? "col-span-1 lg:col-span-2" : "col-span-1"
       }`}
       style={{
-        background: "rgba(15, 15, 30, 0.5)",
+        background: "var(--bg-card)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        border: "1px solid rgba(255, 255, 255, 0.04)",
+        border: "1px solid var(--border-glass)",
       }}
       initial={shouldReduceMotion ? {} : { opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -110,7 +169,7 @@ function ProjectCard({ project, shouldReduceMotion }) {
         shouldReduceMotion
           ? {}
           : {
-              y: -6,
+              y: -2,
               transition: { type: "spring", stiffness: 300, damping: 22 },
             }
       }
@@ -126,12 +185,12 @@ function ProjectCard({ project, shouldReduceMotion }) {
       <div
         className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
         style={{
-          boxShadow: `0 8px 40px -12px rgba(${project.brandColor}, 0.2)`,
+          boxShadow: `inset 0 0 0 1px rgba(${project.brandColor}, 0.2)`,
         }}
         aria-hidden="true"
       />
 
-      {/* ─── Image area with browser mockup ─── */}
+      {/* ─── Image / Video area with browser mockup ─── */}
       <div
         className={`relative ${isFeatured ? "p-5 sm:p-6 lg:p-8" : "p-4 sm:p-5"}`}
         style={{
@@ -144,7 +203,7 @@ function ProjectCard({ project, shouldReduceMotion }) {
           style={{
             boxShadow: "0 4px 24px -6px rgba(0, 0, 0, 0.4), 0 2px 8px -2px rgba(0, 0, 0, 0.3)",
           }}
-          whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
+          whileHover={shouldReduceMotion ? {} : { y: -2 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
         >
           {/* macOS title bar */}
@@ -157,8 +216,9 @@ function ProjectCard({ project, shouldReduceMotion }) {
             </span>
           </div>
 
-          {/* Screenshot */}
-          <div className={`overflow-hidden ${isFeatured ? "h-44 sm:h-56 lg:h-64" : "h-36 sm:h-44"}`}>
+          {/* Screenshot + Video overlay */}
+          <div className={`relative overflow-hidden ${isFeatured ? "h-56 sm:h-72 lg:h-80" : "h-36 sm:h-44"}`}>
+            {/* Static image (always visible as base layer) */}
             {project.image ? (
               <img
                 src={project.image}
@@ -170,6 +230,14 @@ function ProjectCard({ project, shouldReduceMotion }) {
               />
             ) : (
               <ChatMockup />
+            )}
+
+            {/* Video overlay — only rendered when a video source is provided */}
+            {project.video && (
+              <HoverVideo
+                video={project.video}
+                brandColor={project.brandColor}
+              />
             )}
           </div>
         </motion.div>

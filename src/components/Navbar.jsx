@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import "remixicon/fonts/remixicon.css";
 import SquishyButton from "./SquishyButton";
 
-const NAV_ITEMS = ["home", "about", "projects", "skills", "contact"];
+const NAV_ITEMS = ["home", "about", "projects", "skills"];
 
 export default function Navbar({ activeSection, onNavigate }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

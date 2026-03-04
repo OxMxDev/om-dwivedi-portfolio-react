@@ -14,13 +14,13 @@ export default function SquishyButton({
   const shouldReduceMotion = useReducedMotion();
 
   const baseClasses =
-    "relative inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-base cursor-pointer select-none transition-colors duration-200";
+    "relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium text-[15px] cursor-pointer select-none transition-colors duration-200";
 
   const variantClasses = {
     filled:
-      "bg-[var(--accent)] text-[#0a0a0a] font-bold hover:shadow-[0_0_24px_rgba(45,212,191,0.25)]",
+      "bg-[var(--text-primary)] text-[#0a0a0a] hover:bg-white",
     outlined:
-      "border border-white/[0.08] text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-white bg-transparent",
+      "border border-white/[0.15] text-[var(--text-primary)] hover:border-white/30 hover:bg-white/[0.02] bg-transparent",
     ghost:
       "text-[var(--text-secondary)] hover:text-white hover:bg-white/5 bg-transparent",
   };
@@ -28,8 +28,8 @@ export default function SquishyButton({
   const motionProps = shouldReduceMotion
     ? {}
     : {
-        whileHover: { scale: 1.05, transition: { type: "spring", stiffness: 400, damping: 15 } },
-        whileTap: { scale: 0.92, transition: { type: "spring", stiffness: 500, damping: 20 } },
+        whileHover: { y: -1, transition: { type: "spring", stiffness: 400, damping: 15 } },
+        whileTap: { scale: 0.98, transition: { type: "spring", stiffness: 500, damping: 20 } },
       };
 
   const combinedClassName = `${baseClasses} ${variantClasses[variant] || variantClasses.filled} ${className}`;

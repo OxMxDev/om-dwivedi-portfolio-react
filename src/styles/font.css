@@ -1,11 +1,11 @@
-@import "@fontsource/outfit/300.css";
-@import "@fontsource/outfit/400.css";
-@import "@fontsource/outfit/500.css";
-@import "@fontsource/outfit/600.css";
-@import "@fontsource/outfit/700.css";
-@import "@fontsource/outfit/800.css";
+@import "@fontsource/inter/300.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/inter/800.css";
 
 * {
-  font-family: "Outfit", "Inter", system-ui, sans-serif;
+  font-family: "Inter", "SF Pro Display", "Geist", system-ui, sans-serif;
   box-sizing: border-box;
 }

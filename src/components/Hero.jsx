@@ -149,9 +149,9 @@ const FALLBACK_STATS = [
 /* ─── Skeleton pulse block ─── */
 function StatSkeleton() {
   return (
-    <div className="text-center lg:text-left animate-pulse">
-      <div className="h-6 w-10 rounded bg-white/[0.06] mb-1.5 mx-auto lg:mx-0" />
-      <div className="h-3 w-16 rounded bg-white/[0.04] mx-auto lg:mx-0" />
+    <div className="text-left animate-pulse">
+      <div className="h-6 w-10 rounded bg-white/[0.06] mb-1.5" />
+      <div className="h-3 w-16 rounded bg-white/[0.04]" />
     </div>
   );
 }
@@ -189,7 +189,7 @@ function GitHubStats({ shouldReduceMotion }) {
 
   return (
     <motion.div
-      className="flex flex-wrap gap-6 mb-8 justify-center lg:justify-start text-sm font-mono"
+      className="flex flex-wrap gap-6 mb-8 justify-start text-sm font-mono"
       initial={shouldReduceMotion ? {} : { opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 1.5 }}
@@ -199,7 +199,7 @@ function GitHubStats({ shouldReduceMotion }) {
         : stats.map((stat) => (
             <motion.div
               key={stat.label}
-              className="text-center lg:text-left"
+              className="text-left"
               initial={shouldReduceMotion ? {} : { opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
@@ -264,7 +264,7 @@ export default function Hero({ onNavigate }) {
       >
         {/* ─── Left: Typography ─── */}
         <motion.div
-          className="flex-1 text-center lg:text-left"
+          className="flex-1 text-left"
           style={shouldReduceMotion ? {} : { y: contentY }}
         >
           {/* Overline label */}
@@ -280,11 +280,10 @@ export default function Hero({ onNavigate }) {
           </motion.div>
 
           {/* Main headline — massive brutalist type */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[0.95] tracking-[-0.03em] mb-2">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[0.95] tracking-[-0.03em] mb-2 max-w-3xl">
             {LINE1.map((w, i) => (
               <KineticWord key={w} word={w} index={i} shouldReduceMotion={shouldReduceMotion} />
             ))}
-            <br className="hidden sm:block" />
             {LINE2.map((w, i) => (
               <KineticWord
                 key={w}
@@ -294,7 +293,6 @@ export default function Hero({ onNavigate }) {
                 shouldReduceMotion={shouldReduceMotion}
               />
             ))}
-            <br />
             {LINE3.map((w, i) => (
               <KineticWord
                 key={w}
@@ -320,7 +318,7 @@ export default function Hero({ onNavigate }) {
 
           {/* Subtext */}
           <motion.p
-            className="text-base sm:text-lg text-[var(--text-muted)] mb-8 max-w-lg leading-relaxed font-light lg:text-left text-center"
+            className="text-base sm:text-lg text-[var(--text-muted)] mb-8 max-w-lg leading-relaxed font-light text-left"
             initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.3, duration: 0.6 }}
@@ -335,7 +333,7 @@ export default function Hero({ onNavigate }) {
 
           {/* CTAs */}
           <motion.div
-            className="flex flex-col sm:flex-row gap-4 mb-8 justify-center lg:justify-start"
+            className="flex flex-col sm:flex-row gap-4 mb-8 justify-start"
             initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.6, duration: 0.5 }}
@@ -351,7 +349,7 @@ export default function Hero({ onNavigate }) {
 
           {/* Socials — minimal */}
           <motion.div
-            className="flex gap-3 justify-center lg:justify-start"
+            className="flex gap-3 justify-start"
             initial={shouldReduceMotion ? {} : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.8 }}
@@ -366,7 +364,7 @@ export default function Hero({ onNavigate }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-lg border border-white/[0.06] flex items-center justify-center text-[var(--text-muted)] hover:text-white hover:border-white/20 transition-all duration-200"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
+                whileHover={shouldReduceMotion ? {} : { y: -2 }}
                 whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
                 aria-label={social.label}
               >
