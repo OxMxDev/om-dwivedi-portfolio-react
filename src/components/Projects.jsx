@@ -1,5 +1,5 @@
-import { useRef, useState, useCallback } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useRef, useState, useCallback, useEffect } from "react";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import "remixicon/fonts/remixicon.css";
 
 /* ─── Image imports ─── */
@@ -25,6 +25,16 @@ const PROJECTS = [
       "Real-time cart & wishlist sync across sessions with zero stale-state bugs",
       "Cloudinary CDN integration for sub-200ms optimized image delivery",
     ],
+    description:
+      "ShopSphere is a production-grade e-commerce platform built from the ground up with React and Node.js. It features a fully functional product catalog with advanced filtering, search, and category navigation. The backend is powered by Express.js with MongoDB for flexible document-based storage, enabling complex queries for product variants, pricing tiers, and inventory management. Security was a top priority — every route is protected with JWT-based authentication and role-based access control, separating admin and customer permissions cleanly.",
+    features: [
+      "Complete shopping cart with persistent state across sessions — items, quantities, and pricing stay synced even after page refreshes or re-logins",
+      "Admin dashboard with full CRUD operations for products, categories, and user management with audit logging",
+      "Cloudinary-powered image pipeline that auto-optimizes uploads into multiple responsive sizes for fast delivery",
+      "Wishlist system with real-time sync — add or remove items from any device and see changes instantly",
+      "Secure checkout flow with address management, order summary, and payment integration-ready architecture",
+      "Responsive UI built with Tailwind CSS featuring dark mode support and mobile-first breakpoints",
+    ],
     github: "https://github.com/OxMxDev/ShopSphere",
     live: "https://shop-sphere-frontend-sepia.vercel.app",
     layout: "featured",
@@ -41,6 +51,16 @@ const PROJECTS = [
       "Sub-50ms messaging with typing indicators & read receipts via Socket.io",
       "Zustand state management — 80% less prop-drilling, instant UI sync",
       "Secure JWT cookie auth with dynamic profile management",
+    ],
+    description:
+      "A real-time chat application built with React and Socket.io that delivers instant messaging with typing indicators and online presence tracking. The app uses Zustand for lightweight yet powerful state management, eliminating prop-drilling complexity while maintaining reactive UI updates across all connected clients. Authentication is handled through secure HTTP-only JWT cookies, ensuring session persistence without exposing tokens to client-side scripts.",
+    features: [
+      "Instant bi-directional messaging with sub-50ms latency using WebSocket connections via Socket.io",
+      "Live typing indicators and online/offline presence detection across all active conversations",
+      "User profile management with avatar uploads and display name customization",
+      "Zustand-powered global state — reactive updates propagate instantly to all components without prop chains",
+      "Message history with lazy-loaded pagination for efficient rendering of long conversation threads",
+      "DaisyUI-themed responsive interface with smooth transitions and mobile-optimized chat layout",
     ],
     github: "https://github.com/OxMxDev/Real-Time-Chat-Application",
     live: "https://real-time-chat-application-frontend-tawny.vercel.app",
@@ -59,6 +79,16 @@ const PROJECTS = [
       "Recruiter + student dashboards with role-specific job/application workflows",
       "12+ RESTful endpoints with input validation & zero-downtime operations",
       "Mobile-first responsive UI with dynamic filtering across 5+ breakpoints",
+    ],
+    description:
+      "JobPortal is a dual-persona recruitment platform where recruiters post jobs and students discover opportunities — each with their own dedicated dashboard and workflow. Built on a RESTful Express.js backend with MongoDB, it supports complex queries for filtering jobs by location, salary range, experience level, and category. The platform handles the full application lifecycle from job posting through candidate review, with resume uploads powered by Cloudinary's media pipeline.",
+    features: [
+      "Role-based dual dashboards — recruiters manage postings and review applicants, students browse and track applications",
+      "Advanced job search with multi-criteria filtering: location, salary, experience, category, and posting date",
+      "Resume upload and management via Cloudinary with automatic format optimization and secure storage",
+      "Application tracking system with status updates — applied, shortlisted, interviewed, and hired stages",
+      "12+ RESTful API endpoints with comprehensive input validation, error handling, and consistent response format",
+      "Mobile-first responsive design with dynamic layouts adapting across 5+ breakpoints for any device",
     ],
     github: "https://github.com/OxMxDev/JobPortal",
     live: "https://job-portal-frontend-z7u1.onrender.com",
@@ -146,8 +176,187 @@ function HoverVideo({ video, brandColor }) {
   );
 }
 
+/* ─── Project Detail Modal ─── */
+function ProjectDetailModal({ project, onClose }) {
+  /* Close on Escape */
+  useEffect(() => {
+    const handleKey = (e) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", handleKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  return (
+    <motion.div
+      className="project-modal-backdrop"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${project.title} details`}
+    >
+      <motion.div
+        className="project-modal-content"
+        initial={{ opacity: 0, y: 60, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 40, scale: 0.97 }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close button */}
+        <button
+          className="project-modal-close"
+          onClick={onClose}
+          aria-label="Close modal"
+        >
+          <i className="ri-close-line text-xl" aria-hidden="true" />
+        </button>
+
+        {/* ─── Image area ─── */}
+        <div
+          className="relative rounded-xl overflow-hidden border border-white/[0.08] mb-6"
+          style={{
+            boxShadow: `0 4px 32px -8px rgba(${project.brandColor}, 0.2), 0 2px 12px -2px rgba(0, 0, 0, 0.4)`,
+          }}
+        >
+          {/* macOS title bar */}
+          <div className="flex items-center gap-1.5 px-3 py-2 bg-[#1a1a2e] border-b border-white/[0.06]">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" aria-hidden="true" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" aria-hidden="true" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" aria-hidden="true" />
+            <span className="ml-2 text-[9px] font-mono text-white/20 truncate">
+              {project.title.toLowerCase().replace(/\s+/g, "-")}.vercel.app
+            </span>
+          </div>
+          <div className="relative h-56 sm:h-72 lg:h-80 overflow-hidden">
+            {project.image ? (
+              <img
+                src={project.image}
+                alt={`${project.title} — ${project.subtitle}`}
+                className="w-full h-full object-cover object-top"
+                width={800}
+                height={500}
+              />
+            ) : (
+              <ChatMockup />
+            )}
+          </div>
+        </div>
+
+        {/* ─── Header ─── */}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-5">
+          <div>
+            <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              {project.title}
+            </h3>
+            <p
+              className="text-sm font-medium mt-1"
+              style={{ color: `rgb(${project.brandColor})` }}
+            >
+              {project.subtitle}
+            </p>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <a
+              href={project.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg border transition-all duration-200"
+              style={{
+                background: `rgba(${project.brandColor}, 0.12)`,
+                borderColor: `rgba(${project.brandColor}, 0.25)`,
+                color: `rgb(${project.brandColor})`,
+              }}
+            >
+              <i className="ri-external-link-line text-base" aria-hidden="true" />
+              Live Demo
+            </a>
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-shrink-0 w-9 h-9 rounded-lg border border-white/[0.08] flex items-center justify-center text-[var(--text-muted)] hover:text-white hover:border-white/20 transition-all duration-200"
+              aria-label={`View ${project.title} on GitHub`}
+            >
+              <i className="ri-github-line text-lg" aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+
+        {/* ─── Description ─── */}
+        <p className="text-sm sm:text-base leading-relaxed text-[var(--text-secondary)] mb-6">
+          {project.description}
+        </p>
+
+        {/* ─── Key Features ─── */}
+        <div className="mb-6">
+          <h4 className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--text-muted)] mb-4 flex items-center gap-2">
+            <span
+              className="w-5 h-px"
+              style={{ background: `rgb(${project.brandColor})` }}
+              aria-hidden="true"
+            />
+            Key Features
+          </h4>
+          <ul className="space-y-3" role="list">
+            {project.features.map((feature, i) => (
+              <motion.li
+                key={i}
+                className="flex items-start gap-3 text-sm text-[var(--text-secondary)] leading-relaxed"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.15 + i * 0.06, duration: 0.35 }}
+              >
+                <span
+                  className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
+                  style={{ background: `rgb(${project.brandColor})` }}
+                  aria-hidden="true"
+                />
+                {feature}
+              </motion.li>
+            ))}
+          </ul>
+        </div>
+
+        {/* ─── Tech Stack ─── */}
+        <div>
+          <h4 className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--text-muted)] mb-3 flex items-center gap-2">
+            <span
+              className="w-5 h-px"
+              style={{ background: `rgb(${project.brandColor})` }}
+              aria-hidden="true"
+            />
+            Tech Stack
+          </h4>
+          <div className="flex flex-wrap gap-2">
+            {project.tech.map((t) => (
+              <span
+                key={t}
+                className="text-xs font-medium px-3 py-1.5 rounded-lg border transition-colors duration-200"
+                style={{
+                  background: `rgba(${project.brandColor}, 0.06)`,
+                  borderColor: `rgba(${project.brandColor}, 0.12)`,
+                  color: "var(--text-secondary)",
+                }}
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 /* ─── Project Card ─── */
-function ProjectCard({ project, shouldReduceMotion }) {
+function ProjectCard({ project, shouldReduceMotion, onReadMore }) {
   const isFeatured = project.layout === "featured";
 
   return (
@@ -293,7 +502,7 @@ function ProjectCard({ project, shouldReduceMotion }) {
           ))}
         </ul>
 
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5">
           {project.tech.map((t) => (
             <span
               key={t}
@@ -303,6 +512,17 @@ function ProjectCard({ project, shouldReduceMotion }) {
             </span>
           ))}
         </div>
+
+        {/* Read More button */}
+        <button
+          className="project-read-more-btn mt-4 w-full"
+          style={{ "--brand": project.brandColor }}
+          onClick={() => onReadMore(project)}
+          aria-label={`Read more about ${project.title}`}
+        >
+          <span>Read More</span>
+          <i className="ri-arrow-right-line text-sm" aria-hidden="true" />
+        </button>
       </div>
     </motion.article>
   );
@@ -311,43 +531,65 @@ function ProjectCard({ project, shouldReduceMotion }) {
 /* ─── Projects Section ─── */
 export default function Projects() {
   const shouldReduceMotion = useReducedMotion();
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  const handleReadMore = useCallback((project) => {
+    setSelectedProject(project);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setSelectedProject(null);
+  }, []);
 
   return (
-    <section id="projects" className="py-24 px-4" aria-label="Featured projects">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          className="mb-14"
-          initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <span className="w-8 h-px bg-[var(--accent-violet)]" aria-hidden="true" />
-            <span className="text-xs font-mono uppercase tracking-[0.25em] text-[var(--text-muted)]">
-              Selected Work
-            </span>
-          </div>
-          <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-            Featured{" "}
-            <span className="gradient-text">Projects</span>
-          </h2>
-          <p className="text-base text-[var(--text-muted)] mt-3 max-w-xl">
-            Production-grade full-stack systems with secure auth, real-time data
-            flows, and scalable architecture.
-          </p>
-        </motion.div>
+    <>
+      <section id="projects" className="py-24 px-4" aria-label="Featured projects">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            className="mb-14"
+            initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-8 h-px bg-[var(--accent-violet)]" aria-hidden="true" />
+              <span className="text-xs font-mono uppercase tracking-[0.25em] text-[var(--text-muted)]">
+                Selected Work
+              </span>
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
+              Featured{" "}
+              <span className="gradient-text">Projects</span>
+            </h2>
+            <p className="text-base text-[var(--text-muted)] mt-3 max-w-xl">
+              Production-grade full-stack systems with secure auth, real-time data
+              flows, and scalable architecture.
+            </p>
+          </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          {PROJECTS.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              shouldReduceMotion={shouldReduceMotion}
-            />
-          ))}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {PROJECTS.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                shouldReduceMotion={shouldReduceMotion}
+                onReadMore={handleReadMore}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* ─── Detail Modal ─── */}
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectDetailModal
+            project={selectedProject}
+            onClose={handleCloseModal}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 }

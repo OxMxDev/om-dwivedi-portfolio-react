@@ -239,6 +239,96 @@ body::after {
   50% { opacity: 1; transform: scale(1.1); }
 }
 
+/* ─── Project Detail Modal ─── */
+.project-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.project-modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin: auto;
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  box-shadow:
+    0 24px 80px -12px rgba(0, 0, 0, 0.6),
+    0 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.project-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.project-modal-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ─── Read More Button ─── */
+.project-read-more-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(var(--brand), 0.15);
+  background: rgba(var(--brand), 0.06);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.project-read-more-btn:hover {
+  background: rgba(var(--brand), 0.12);
+  border-color: rgba(var(--brand), 0.3);
+  color: var(--text-primary);
+}
+.project-read-more-btn:hover i {
+  transform: translateX(3px);
+}
+.project-read-more-btn i {
+  transition: transform 0.25s ease;
+}
+
+@media (max-width: 640px) {
+  .project-modal-content {
+    padding: 20px;
+    border-radius: 16px;
+  }
+  .project-modal-backdrop {
+    padding: 12px 8px;
+  }
+}
+
 /* ─── Skills Conveyor Belt ─── */
 .belt-section {
   position: relative;
