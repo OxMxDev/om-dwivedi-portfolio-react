@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import "remixicon/fonts/remixicon.css";
 import SquishyButton from "./SquishyButton";
 
@@ -138,6 +138,130 @@ function DataViz({ shouldReduceMotion }) {
   );
 }
 
+/* ─── Cursor-following spotlight image reveal ─── */
+function SpotlightImage({ mousePos, isActive, sectionRef }) {
+  const canvasRef = useRef(null);
+  const [ripples, setRipples] = useState([]);
+  const lastRippleTime = useRef(0);
+
+  /* Spawn ripples as mouse moves */
+  useEffect(() => {
+    if (!isActive) return;
+    const now = Date.now();
+    if (now - lastRippleTime.current > 250) {
+      lastRippleTime.current = now;
+      setRipples((prev) => [
+        ...prev.slice(-5),
+        { id: now, x: mousePos.x, y: mousePos.y },
+      ]);
+      setTimeout(() => {
+        setRipples((prev) => prev.filter((r) => r.id !== now));
+      }, 1000);
+    }
+  }, [mousePos.x, mousePos.y, isActive]);
+
+  return (
+    <div
+      className="spotlight-layer"
+      aria-hidden="true"
+      style={{
+        opacity: isActive ? 1 : 0,
+        WebkitMaskImage: isActive
+          ? `radial-gradient(circle 160px at ${mousePos.x}px ${mousePos.y}px, black 0%, black 40%, transparent 100%)`
+          : "none",
+        maskImage: isActive
+          ? `radial-gradient(circle 160px at ${mousePos.x}px ${mousePos.y}px, black 0%, black 40%, transparent 100%)`
+          : "none",
+      }}
+    >
+      {/* The model image — fills the entire hero section */}
+      <img
+        src="/profile_model.png"
+        alt=""
+        className="spotlight-image"
+        draggable={false}
+      />
+
+      {/* Color grading overlay */}
+      <div className="spotlight-color-grade" />
+    </div>
+  );
+}
+
+/* ─── Spotlight glow ring that follows cursor ─── */
+function SpotlightGlow({ mousePos, isActive }) {
+  if (!isActive) return null;
+  return (
+    <div className="spotlight-effects" aria-hidden="true">
+      {/* Outer glow ring */}
+      <div
+        className="spotlight-ring"
+        style={{
+          left: mousePos.x,
+          top: mousePos.y,
+        }}
+      />
+      {/* Inner bright core */}
+      <div
+        className="spotlight-core"
+        style={{
+          left: mousePos.x,
+          top: mousePos.y,
+        }}
+      />
+      {/* Floating particles near cursor */}
+      <SpotlightParticles mousePos={mousePos} />
+    </div>
+  );
+}
+
+/* ─── Tiny particles that float near the cursor ─── */
+function SpotlightParticles({ mousePos }) {
+  const [particles, setParticles] = useState([]);
+  const lastSpawn = useRef(0);
+
+  useEffect(() => {
+    const now = Date.now();
+    if (now - lastSpawn.current > 120) {
+      lastSpawn.current = now;
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 30 + Math.random() * 100;
+      const newP = {
+        id: now + Math.random(),
+        x: mousePos.x + Math.cos(angle) * 20,
+        y: mousePos.y + Math.sin(angle) * 20,
+        tx: mousePos.x + Math.cos(angle) * dist,
+        ty: mousePos.y + Math.sin(angle) * dist,
+        size: 2 + Math.random() * 3,
+      };
+      setParticles((prev) => [...prev.slice(-10), newP]);
+      setTimeout(() => {
+        setParticles((prev) => prev.filter((p) => p.id !== newP.id));
+      }, 900);
+    }
+  }, [mousePos.x, mousePos.y]);
+
+  return (
+    <>
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="spotlight-particle"
+          style={{ width: p.size, height: p.size }}
+          initial={{ left: p.x, top: p.y, opacity: 0.8, scale: 1 }}
+          animate={{
+            left: p.tx,
+            top: p.ty,
+            opacity: 0,
+            scale: 0,
+          }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
+        />
+      ))}
+    </>
+  );
+}
+
 const GITHUB_USERNAME = "OxMxDev";
 
 const FALLBACK_STATS = [
@@ -218,6 +342,23 @@ function GitHubStats({ shouldReduceMotion }) {
 export default function Hero({ onNavigate }) {
   const sectionRef = useRef(null);
   const shouldReduceMotion = useReducedMotion();
+  const [mousePos, setMousePos] = useState({ x: -999, y: -999 });
+  const [isMouseInSection, setIsMouseInSection] = useState(false);
+
+  const handleMouseMove = useCallback((e) => {
+    if (window.innerWidth < 1024 || shouldReduceMotion) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+    if (!isMouseInSection) setIsMouseInSection(true);
+  }, [shouldReduceMotion, isMouseInSection]);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsMouseInSection(false);
+    setMousePos({ x: -999, y: -999 });
+  }, []);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -237,7 +378,16 @@ export default function Hero({ onNavigate }) {
       ref={sectionRef}
       className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden"
       aria-label="Hero introduction"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
+      {/* ─── Spotlight image layer (behind everything) ─── */}
+      <SpotlightImage
+        mousePos={mousePos}
+        isActive={isMouseInSection}
+        sectionRef={sectionRef}
+      />
+      <SpotlightGlow mousePos={mousePos} isActive={isMouseInSection} />
       {/* Dot grid background */}
       <div
         className="absolute inset-0 opacity-[0.04]"
@@ -259,7 +409,7 @@ export default function Hero({ onNavigate }) {
       />
 
       <motion.div
-        className="max-w-7xl w-full mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-12 pt-20"
+        className="max-w-7xl w-full mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-12 pt-20 relative z-[2]"
         style={shouldReduceMotion ? {} : { opacity }}
       >
         {/* ─── Left: Typography ─── */}
@@ -376,7 +526,7 @@ export default function Hero({ onNavigate }) {
 
         {/* ─── Right: Interactive Code Window ─── */}
         <motion.div
-          className="flex-shrink-0 w-full lg:w-auto"
+          className="flex-shrink-0 w-full lg:w-auto relative z-[2]"
           style={shouldReduceMotion ? {} : { y: codeY }}
         >
           <CodeWindow shouldReduceMotion={shouldReduceMotion} />
