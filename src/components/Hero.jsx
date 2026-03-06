@@ -345,20 +345,41 @@ export default function Hero({ onNavigate }) {
   const [mousePos, setMousePos] = useState({ x: -999, y: -999 });
   const [isMouseInSection, setIsMouseInSection] = useState(false);
 
-  const handleMouseMove = useCallback((e) => {
-    if (window.innerWidth < 1024 || shouldReduceMotion) return;
-    const rect = e.currentTarget.getBoundingClientRect();
+  /* Helper to update spotlight position from client coordinates */
+  const updateSpotlight = useCallback((clientX, clientY) => {
+    if (shouldReduceMotion) return;
+    const rect = sectionRef.current?.getBoundingClientRect();
+    if (!rect) return;
     setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: clientX - rect.left,
+      y: clientY - rect.top,
     });
-    if (!isMouseInSection) setIsMouseInSection(true);
-  }, [shouldReduceMotion, isMouseInSection]);
+    setIsMouseInSection(true);
+  }, [shouldReduceMotion]);
+
+  const handleMouseMove = useCallback((e) => {
+    updateSpotlight(e.clientX, e.clientY);
+  }, [updateSpotlight]);
 
   const handleMouseLeave = useCallback(() => {
     setIsMouseInSection(false);
     setMousePos({ x: -999, y: -999 });
   }, []);
+
+  /* Touch support for mobile devices */
+  const handleTouchMove = useCallback((e) => {
+    const touch = e.touches[0];
+    if (touch) updateSpotlight(touch.clientX, touch.clientY);
+  }, [updateSpotlight]);
+
+  const handleTouchEnd = useCallback(() => {
+    /* Keep the spotlight visible for a moment after lifting finger */
+    setTimeout(() => {
+      setIsMouseInSection(false);
+      setMousePos({ x: -999, y: -999 });
+    }, 600);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -380,6 +401,8 @@ export default function Hero({ onNavigate }) {
       aria-label="Hero introduction"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       {/* ─── Spotlight image layer (behind everything) ─── */}
       <SpotlightImage
