@@ -1,5 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { GitHubCalendar } from "react-github-calendar";
+import { Tooltip as ReactTooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 import "remixicon/fonts/remixicon.css";
 
 /* ─── Config ─── */
@@ -302,32 +305,85 @@ export default function About() {
           ))}
         </div>
 
-        {/* ─── Contribution Charts ─── */}
+        {/* ─── Custom GitHub Contribution Calendar ─── */}
         <motion.div
-          className="mt-6"
+          className="mt-12"
           initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <ContributionCard
-              title="GitHub Activity"
-              icon="ri-github-fill"
-              color="142, 68, 255"
-              href={`https://github.com/${GITHUB_USERNAME}`}
-              index={0}
-              shouldReduceMotion={shouldReduceMotion}
-            >
-              {(onLoad) => (
-                <img
-                  src={`https://ghchart.rshah.org/7c3aed/${GITHUB_USERNAME}`}
-                  alt={`${GITHUB_USERNAME}'s GitHub contribution chart`}
-                  className="w-full h-auto"
-                  onLoad={() => onLoad(true)}
-                  loading="lazy"
+          <div className="flex items-center gap-3 mb-6">
+            <i className="ri-github-fill text-2xl" style={{ color: "rgb(142, 68, 255)" }} />
+            <h3 className="text-xl font-bold text-white tracking-tight">GitHub Contributions</h3>
+          </div>
+
+          <div 
+            className="group relative rounded-2xl overflow-hidden p-6 sm:p-8"
+            style={{
+              background: "var(--bg-card)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: "1px solid var(--border-glass)",
+            }}
+          >
+            {/* Hover glow */}
+            <div
+              className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style={{
+                background: `linear-gradient(135deg, rgba(142, 68, 255, 0.06), transparent 60%)`,
+              }}
+              aria-hidden="true"
+            />
+            <div
+              className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style={{ boxShadow: `inset 0 0 0 1px rgba(142, 68, 255, 0.2)` }}
+              aria-hidden="true"
+            />
+
+            <div className="relative w-full flex justify-center items-center overflow-x-auto overflow-y-hidden pb-4 custom-scrollbar">
+              <div className="min-w-[750px]">
+                <GitHubCalendar 
+                  username={GITHUB_USERNAME}
+                  colorScheme="dark"
+                  blockSize={14}
+                  blockMargin={5}
+                  blockRadius={3}
+                  fontSize={14}
+                  theme={{
+                    dark: ['#161b22', '#4c268f', '#7337db', '#8e44ff', '#b485ff']
+                  }}
+                  renderBlock={(block, activity) => (
+                    React.cloneElement(block, {
+                      "data-tooltip-id": "gh-tooltip",
+                      "data-tooltip-html": `<div class="text-center"><strong>${activity.count} contributions</strong><br/><span class="text-xs text-gray-400">${activity.date}</span></div>`,
+                      style: { ...block.props.style },
+                      className: `${block.props.className || ''} hover:opacity-80 transition-opacity duration-200`
+                    })
+                  )}
                 />
-              )}
-            </ContributionCard>
+                <ReactTooltip 
+                  id="gh-tooltip" 
+                  place="top" 
+                  effect="solid" 
+                  delayShow={50}
+                  className="!bg-[#0f111a] !text-white !border !border-white/10 !rounded-lg !px-3 !py-2 !shadow-xl !backdrop-blur-md"
+                />
+              </div>
+            </div>
+            
+            <div className="mt-4 flex justify-between items-center text-xs text-[var(--text-muted)] border-t border-white/5 pt-4">
+              <p>Contribution data is pulled in real-time.</p>
+              <a
+                href={`https://github.com/${GITHUB_USERNAME}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 hover:text-white transition-colors"
+              >
+                View full profile <i className="ri-arrow-right-line" />
+              </a>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>
