@@ -4,13 +4,16 @@ import "remixicon/fonts/remixicon.css";
 /* ─── Skills Data ─── */
 const ROW_1 = [
   { name: "React", icon: "ri-reactjs-line", color: "#61DAFB" },
+  { name: "Next.js", icon: "ri-layout-grid-line", color: "#FFFFFF" },
   { name: "Node.js", icon: "ri-nodejs-line", color: "#68A063" },
+  { name: "TypeScript", icon: "ri-code-s-slash-line", color: "#3178C6" },
   { name: "MongoDB", icon: "ri-database-2-line", color: "#4DB33D" },
   { name: "Express", icon: "ri-server-line", color: "#FFFFFF" },
   { name: "Tailwind CSS", icon: "ri-palette-line", color: "#38BDF8" },
 ];
 
 const ROW_2 = [
+  { name: "Prisma", icon: "ri-database-line", color: "#2D3748" },
   { name: "Socket.io", icon: "ri-wifi-line", color: "#25C2A0" },
   { name: "JWT", icon: "ri-shield-keyhole-line", color: "#D63AFF" },
   { name: "Cloudinary", icon: "ri-cloud-line", color: "#3448C5" },
